@@ -98,3 +98,24 @@ final class ViewController: UIViewController, StrataDelegate {
 - LiDAR `buildModelFromScan()` — 3D-модель комнаты из скана без ручного шага высоты.
 - Обмер комнаты (`StrataMeasureSession`): авто-режим LiDAR/ручной, редактирование контура,
   замер высоты → замкнутая 3D-модель `Room3DModel`.
+
+## Выпуск нового релиза (для мейнтейнера)
+
+Порядок важен: `gh release create` тегает текущий HEAD этого репо, а коммит с новым
+`checksum` появляется уже после — поэтому тег в конце переставляется на него.
+
+1. В репозитории **ядра** собрать и опубликовать ассет:
+   ```bash
+   ./build-xcframework.sh --release X.Y.Z
+   ```
+   Создаёт GitHub Release `X.Y.Z` в этом репо, заливает `Strata.xcframework.zip`,
+   печатает `checksum` и готовый блок `binaryTarget`.
+2. В этом репо обновить `url` и `checksum` в `Package.swift` под версию `X.Y.Z`.
+3. Закоммитить и переставить тег на коммит с checksum:
+   ```bash
+   git commit -am "release: Strata X.Y.Z binary (checksum)"
+   git push origin main
+   git tag -f X.Y.Z HEAD          # тег уже создан шагом 1 — двигаем на этот коммит
+   git push -f origin X.Y.Z
+   ```
+4. Проверить, что ассет на месте: `gh release view X.Y.Z --repo antyukhin/strata-dist`.
