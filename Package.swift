@@ -7,7 +7,7 @@ import PackageDescription
 let package = Package(
     name: "Strata",
     platforms: [
-        .iOS(.v18)
+        .iOS(.v17)
     ],
     products: [
         .library(name: "Strata", targets: ["Strata"]),
@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "Strata",
-            url: "https://github.com/antyukhin/strata-dist/releases/download/0.8.1/Strata.xcframework.zip",
-            checksum: "54eab37a990f6d75350d1a7661fed86d6ccaf16dbbe98249495c4f33963b6f7d" // ← вывод `swift package compute-checksum` / --release
+            url: "https://github.com/antyukhin/strata-dist/releases/download/0.8.3/Strata.xcframework.zip",
+            checksum: "563e602dc3003fd49574ef72e191295ef4695778176b20b9363632543d555dbc" // ← вывод `swift package compute-checksum` / --release
         ),
     ]
 )
