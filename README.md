@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.8.5` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.8.6` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.5"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.6"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -92,6 +92,11 @@ final class ViewController: UIViewController, StrataDelegate {
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.8.6
+- Отслеживание качества AR-трекинга в LiDAR-скане: `StrataMeasureSession.trackingState`
+  (`ScanTrackingState`), `isReadyToScan` и пуш `measureSession(_:didChangeTracking:)`.
+  Для гейта кнопки «Завершить скан» и подсказок по трекингу. Аддитивно.
 
 ### 0.8.5
 - `StrataError` конформит `LocalizedError` — `error.localizedDescription` отдаёт
