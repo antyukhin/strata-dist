@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.8.6` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.8.7` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.6"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.7"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -92,6 +92,13 @@ final class ViewController: UIViewController, StrataDelegate {
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.8.7
+- Нативная визуализация RoomPlan во время скана (живой каркас стен, окна/двери/
+  проёмы, боксы объектов, коучинг) — силами `RoomCaptureView`. Включена по
+  умолчанию; `showsScanVisualization: Bool = true` в инициализаторах
+  `StrataRoomSession` / `StrataMeasureSession` (`false` — headless-скан без оверлея).
+  Хендофф обхода (`StrataRoomSession`) на момент релиза device-верифицируется.
 
 ### 0.8.6
 - Отслеживание качества AR-трекинга в LiDAR-скане: `StrataMeasureSession.trackingState`
