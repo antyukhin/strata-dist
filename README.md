@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.8.4` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.8.5` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.4"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.5"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -92,6 +92,11 @@ final class ViewController: UIViewController, StrataDelegate {
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.8.5
+- `StrataError` конформит `LocalizedError` — `error.localizedDescription` отдаёт
+  осмысленное английское сообщение по каждому кейсу (раньше — generic
+  Foundation-фоллбэк). Аддитивно, API не изменился.
 
 ### 0.8.4
 - `StrataMeasureSession.isLiDARAvailable` — публичный статический флаг наличия
