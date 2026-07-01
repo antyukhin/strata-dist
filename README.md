@@ -98,7 +98,10 @@ final class ViewController: UIViewController, StrataDelegate {
   проёмы, боксы объектов, коучинг) — силами `RoomCaptureView`. Включена по
   умолчанию; `showsScanVisualization: Bool = true` в инициализаторах
   `StrataRoomSession` / `StrataMeasureSession` (`false` — headless-скан без оверлея).
-  Хендофф обхода (`StrataRoomSession`) на момент релиза device-верифицируется.
+- LiDAR-скан больше не делает двойную конфигурацию `ARSession` — устраняет сбой
+  инициализации VIO, из-за которого скан мог не дать геометрии.
+- Проверено на устройстве: визуализация скана и LiDAR-обмер (`StrataMeasureSession`).
+  ⚠️ Хендофф обхода с отделкой (`StrataRoomSession`) ещё не верифицирован.
 
 ### 0.8.6
 - Отслеживание качества AR-трекинга в LiDAR-скане: `StrataMeasureSession.trackingState`
