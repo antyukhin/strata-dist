@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "Strata",
-            url: "https://github.com/antyukhin/strata-dist/releases/download/0.8.7/Strata.xcframework.zip",
-            checksum: "62db061a59fa2f113ce54a2eb85d48bd5a63677315444e9c87877ee8f0cce0f7" // ← вывод `swift package compute-checksum` / --release
+            url: "https://github.com/antyukhin/strata-dist/releases/download/0.9.0/Strata.xcframework.zip",
+            checksum: "a597312401e0e8aa1b194d1e56a6c5d9cd33d6aebe64b667546f95da64d66665" // ← вывод `swift package compute-checksum` / --release
         ),
     ]
 )
