@@ -86,12 +86,33 @@ final class ViewController: UIViewController, StrataDelegate {
 | `StrataDelegate` | События сессии: обнаружение поверхности, применение, ошибки |
 | `StrataDiagnostics` | Диагностика состояния AR-сессии |
 | `StrataError` | Ошибки SDK |
-| `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR) |
-| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур или ручная «рулетка»; высота → 3D-модель комнаты |
+| `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR); USDZ-экспорт скана |
+| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана |
 
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.11.0
+- USDZ-экспорт LiDAR-скана: `exportUSDZ()` на `StrataMeasureSession` и
+  `StrataRoomSession` пишет результат скана в `.usdz` (нативная RoomPlan-геометрия:
+  стены, проёмы, мебель) во временную директорию и возвращает **URL файла** —
+  для `QLPreviewController`, share sheet или отправки на бэкенд. `nil`, если
+  завершённого LiDAR-скана нет. Аддитивно.
+
+### 0.10.0
+- AR-обмер контура стены **без LiDAR**: `StrataMeasureSession.start(mode: .wall)` —
+  прицел рейкастит на детектированную вертикальную плоскость, первая точка лочит её,
+  дальше обычные `placePoint()`/`closeLoop()`. Результат — `RoomMeasurement` с `corners`
+  в базисе стены `(u,v)` (u=вдоль стены, v=высота) и новым полем `wallPlane: WallPlane?`.
+- Новый публичный тип `WallPlane`, новая ошибка `StrataError.wallPlaneNotFound`.
+- Ограничение: детект вертикальной плоскости — штатный ARKit; featureless-стены
+  (ровная белая покраска) могут не детектиться.
+
+### 0.9.0
+- Проёмы из LiDAR-скана: `Room3DModel.openings: [DetectedOpening]` (двери/окна/проёмы,
+  каждый привязан к стене модели). Пусто на ручном обмере. Аддитивно — модели,
+  сохранённые до 0.9.0, декодируются как прежде.
 
 ### 0.8.7
 - Нативная визуализация RoomPlan во время скана (живой каркас стен, окна/двери/
