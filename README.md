@@ -88,10 +88,22 @@ final class ViewController: UIViewController, StrataDelegate {
 | `StrataError` | Ошибки SDK |
 | `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR); USDZ-экспорт скана |
 | `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана |
+| `MeasureGuideStyle` | Стиль AR-направляющих обмера (цвета линий/углов/подписей, толщина, радиус) |
 
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.12.0
+- `MeasureGuideStyle` — стиль AR-направляющих обмера под фирменные цвета приложения:
+  `lineColor` (рёбра, резинка, призрак короба), `cornerColor`,
+  `highlightedCornerColor`, `labelColor`, `lineThickness`, `cornerRadius`.
+  Задаётся через `StrataMeasureSession.guideStyle`, применяется на лету;
+  дефолт повторяет прежние цвета — без настройки вид не изменился.
+- Подписи длин разворачиваются лицом к камере (billboard). Фикс режима `.wall`:
+  на вертикальном контуре подписи лежали горизонтально и были видны с ребра.
+- Подпись длины форматируется по локали устройства (`2,40 m` в de/ru вместо `2.40 m`).
+- Аддитивно, ломающих изменений нет.
 
 ### 0.11.0
 - USDZ-экспорт LiDAR-скана: `exportUSDZ()` на `StrataMeasureSession` и
