@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.8.7` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.13.0` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.8.7"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.13.0"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -89,10 +89,29 @@ final class ViewController: UIViewController, StrataDelegate {
 | `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR); USDZ-экспорт скана |
 | `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана |
 | `MeasureGuideStyle` | Стиль AR-направляющих обмера (цвета линий/углов/подписей, толщина, радиус) |
+| `Room3DModel` + `RoomMesh` | 3D-модель комнаты (пол/стены/потолок, проёмы) и её триангуляция; на LiDAR стены со скосом — реальной формы |
 
 Полная документация по API, RoomPlan и обмеру — в основном репозитории ядра.
 
 ## Changelog
+
+### 0.13.0
+- **Реальная форма стен на LiDAR.** Стена со скошенным верхом (мансарда, односкатный
+  потолок) строится из `CapturedRoom.Surface.polygonCorners`, а не выдавленным
+  прямоугольником: `Room3DModel.Face.vertices` — контур произвольной длины. Контур
+  используется, только если по форме он не прямоугольник; обычная комната строится
+  как раньше.
+- `Room3DModel.Face.isSynthesized` — грань достроена допущением (потолок всегда;
+  стена, выдавленная из ребра пола), а не измерена. У комнаты со скосом настоящий
+  потолок — скат, поэтому площадь синтезированного потолка по такому скану неверна:
+  теперь это видно из данных. JSON моделей до 0.13.0 декодируется (дефолт `false`).
+- Зафиксирован **контракт грани**: `Face.normal` единичная и направлена внутрь комнаты;
+  оси в плоскости грани строить от неё (`u = normalize(cross(worldUp, face.normal))`),
+  а не от порядка вершин — winding не гарантирован. У вырожденной грани нормаль нулевая.
+- `DetectedOpening.offsetAlongWall` считается вдоль той же оси `u` от вершины стены с
+  минимальной проекцией на неё: значение неотрицательно и не больше длины стены.
+- `Room3DModel.height` на LiDAR — максимум по стенам скана (высота самой высокой стены).
+- Аддитивно, ломающих изменений нет.
 
 ### 0.12.0
 - `MeasureGuideStyle` — стиль AR-направляющих обмера под фирменные цвета приложения:
