@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.15.0` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.16.0` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.15.0"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.16.0"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -87,8 +87,9 @@ final class ViewController: UIViewController, StrataDelegate {
 | `StrataDiagnostics` | Диагностика состояния AR-сессии |
 | `StrataError` | Ошибки SDK |
 | `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR); USDZ-экспорт скана |
-| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана |
-| `MeasureGuideStyle` | Стиль AR-направляющих обмера (цвета линий/углов/подписей, толщина, радиус) |
+| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана; живые ниши во время LiDAR-скана (`showsLiveNiches`) |
+| `LiveNicheDiagnostics` | Диагностика поиска ниш: приходит ли глубина, время шага детектора, частота рамки |
+| `MeasureGuideStyle` | Стиль AR-направляющих обмера (цвета линий/углов/подписей, толщина, радиус) и цвет обводки живых ниш (`nicheColor`, по умолчанию красный) |
 | `Room3DModel` + `RoomMesh` | 3D-модель комнаты (пол/стены/потолок, проёмы) и её триангуляция; на LiDAR стены со скосом — реальной формы, стены ниши — своей высоты, устье ниши — отдельной гранью |
 | `DetectedOpening` | Проём (дверь/окно) из LiDAR-скана: габарит, привязка к стене и положение на ней |
 
@@ -128,6 +129,21 @@ let contour = face.vertices.map { i -> SIMD2<Float> in
 где `openings` пуст.
 
 ## Changelog
+
+### 0.16.0
+- **Живые ниши во время LiDAR-скана.** `StrataMeasureSession.showsLiveNiches` (по умолчанию
+  `false`) ищет ниши по сырой глубине LiDAR прямо во время скана RoomPlan и обводит их рамкой
+  поверх визуализации скана с подписью «Ш × В · Г» (сантиметры, единица по локали). Находит
+  ниши, которых RoomPlan не видит, — не доходящие до пола (например, вентиляционные).
+- `MeasureGuideStyle.nicheColor` — цвет обводки, по умолчанию красный, меняется на лету.
+- `LiveNicheDiagnostics` / `StrataMeasureSession.liveNicheDiagnostics` — приходит ли глубина во
+  время скана, время шага детектора, частота рамки.
+- Ограничения: глубина во время RoomPlan приходит на iPad Pro / iOS 27, на iPhone / iOS 26 не
+  проверено (нет глубины — `framesWithDepth == 0`, функция молча не работает); окна и проём двери
+  тоже подсвечиваются; ниши пока только рисуются — в `Room3DModel` и USDZ попадут в следующих
+  версиях. Производительность проверяйте в Release.
+- Аддитивно: без флага поведение 0.15.0. Проверено тестами на записанных сканах; живой прогон
+  на устройстве ещё не пройден.
 
 ### 0.15.0
 - **Ниша в LiDAR-модели.** Стена скана, заметно (> 5 см) ниже комнаты и стоящая на полу
