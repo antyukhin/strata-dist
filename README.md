@@ -87,7 +87,7 @@ final class ViewController: UIViewController, StrataDelegate {
 | `StrataDiagnostics` | Диагностика состояния AR-сессии |
 | `StrataError` | Ошибки SDK |
 | `StrataRoomSession` + `StrataRoomDelegate` | RoomPlan-отделка с окклюзией (LiDAR); USDZ-экспорт скана |
-| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана (с нишами); поиск ниш на любом LiDAR-скане, рамка ниш поверх скана — `showsLiveNiches` |
+| `StrataMeasureSession` + `StrataMeasureDelegate` | Обмер комнаты: LiDAR-контур, ручная «рулетка» или контур стены (`.wall`); высота → 3D-модель комнаты; USDZ-экспорт скана (ниши — углублением с вырезом в стене); поиск ниш на любом LiDAR-скане, рамка ниш поверх скана — `showsLiveNiches` |
 | `LiveNicheDiagnostics` | Диагностика поиска ниш (наполняется на любом LiDAR-скане): приходит ли глубина, время шага детектора, частота рамки |
 | `MeasureGuideStyle` | Стиль AR-направляющих обмера (цвета линий/углов/подписей, толщина, радиус) и цвет обводки и подписей живых ниш (`nicheColor`, по умолчанию красный) |
 | `Room3DModel` + `RoomMesh` | 3D-модель комнаты (пол/стены/потолок, проёмы, ниши — `niches`) и её триангуляция; на LiDAR стены со скосом — реальной формы, стены ниши — своей высоты, устье ниши — отдельной гранью |
