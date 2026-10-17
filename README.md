@@ -21,13 +21,13 @@ Xcode → **File → Add Package Dependencies…** → вставить URL:
 https://github.com/antyukhin/strata-dist
 ```
 
-Выбрать правило версии **Up to Next Major** от `0.17.0` и добавить продукт `Strata` в таргет.
+Выбрать правило версии **Up to Next Major** от `0.17.1` и добавить продукт `Strata` в таргет.
 
 Или в `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.17.0"),
+    .package(url: "https://github.com/antyukhin/strata-dist", from: "0.17.1"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: ["Strata"]),
@@ -131,6 +131,17 @@ let contour = face.vertices.map { i -> SIMD2<Float> in
 
 ## Changelog
 
+### 0.17.1
+- **Вырез под нишу в стене USDZ.** `exportUSDZ()` прорезает в лице стены RoomPlan прямоугольное отверстие на
+  месте устья каждой ниши — в QuickLook и CAD ниша видна углублением. Корневой слой `Strata.usda`
+  переопределяет только геометрию существующего меша `Wall<N>`: узел, имя, UUID, материал, трансформ, дверь и
+  угловые блоки RoomPlan не меняются, файлы RoomPlan — байт-в-байт. Несколько ниш, ниша у двери, ниша на стыке
+  двух коллинеарных стен — поддержаны.
+- Не вышло разобрать стену — она остаётся сплошной, как в 0.17.0, ниша сохраняется. Ниша глубже стены (16 см) —
+  тыл стены не прорезается. `Room3DModel` и JSON не меняются.
+- Проверено тестами (SceneKit, `usdchecker --arkit`, рендер); QuickLook на устройстве не проверен. Откат
+  детектора ниш (если понадобится) — 0.17.2.
+
 ### 0.17.0
 - **Ниши в `Room3DModel`.** `Room3DModel.niches: [DetectedNiche]` — ниши, показанные за LiDAR-скан,
   привязаны к wall-граням как проёмы (`wallID` — индекс грани, `originInWall` — тот же базис грани).
@@ -146,7 +157,7 @@ let contour = face.vertices.map { i -> SIMD2<Float> in
 - ⚠️ **Смена поведения:** поиск ниш идёт на любом LiDAR-скане без флага (`showsLiveNiches` — только
   рамка); подписи ниш теперь цвета `nicheColor`, а не `labelColor`.
 - Выпущено до прогона на устройстве: нагрузка детектора на скане целой комнаты, QuickLook и iPhone /
-  iOS 26 не проверены. Если детектор окажется дорог — патч 0.17.1 вернёт поведение 0.16.0.
+  iOS 26 не проверены. Если детектор окажется дорог — патч 0.17.2 вернёт поведение 0.16.0.
 
 ### 0.16.0
 - **Живые ниши во время LiDAR-скана.** `StrataMeasureSession.showsLiveNiches` (по умолчанию
